@@ -35,9 +35,16 @@ def parse_relic_args(relic_args):
     return relics
 
 
+def parse_rate(rate_str):
+    rate = re.search('\(([0-9]*(\.[0-9]+)?)%\)', rate_str)
+    return float(rate.group(1)) if rate else None
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('relics', nargs='+')
+    parser.add_argument('--sort-rate', action='store_true')
+    parser.add_argument('--sort-price', action='store_true')
     args = parser.parse_args()
 
     relics = parse_relic_args(args.relics)
@@ -72,9 +79,13 @@ def main():
             price = market.get_item_price(item)
 
             rows.append([location, drop_item, rate_str, price])
-    
-    rows.sort(key=lambda row: row[1])
-    # rows.sort(key=lambda row: row[3], reverse=True)
+
+    if args.sort_rate:
+        rows.sort(key=lambda row: (parse_rate(row[2]), row[2], -row[3]))
+    elif args.sort_price:
+        rows.sort(key=lambda row: row[3], reverse=True)
+    else:
+        rows.sort(key=lambda row: row[1])
     print(tabulate(rows, headers=['Location', 'Drop', 'Rate', 'Price']))
 
 
