@@ -73,7 +73,8 @@ def main():
 
             rows.append([location, drop_item, rate_str, price])
     
-    rows.sort(key=lambda row: row[3], reverse=True)
+    rows.sort(key=lambda row: row[1])
+    # rows.sort(key=lambda row: row[3], reverse=True)
     print(tabulate(rows, headers=['Location', 'Drop', 'Rate', 'Price']))
 
 
