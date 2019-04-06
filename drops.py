@@ -101,7 +101,7 @@ def get_missions(nc=True, save=True):
             os.makedirs('drops')
 
         with open('drops/missions.json', 'w') as f:
-            json.dump(missions, f, intent=2)
+            json.dump(missions, f, indent=2)
 
         with open('drops/missions.csv', 'w') as f:
             writer = csv.writer(f)
@@ -175,7 +175,7 @@ def get_relics(nc=True, save=True):
             os.makedirs('drops')
 
         with open('drops/relics.json', 'w') as f:
-            json.dump(relics, f, intent=2)
+            json.dump(relics, f, indent=2)
 
         with open('drops/relics.csv', 'w') as f:
             writer = csv.writer(f)
