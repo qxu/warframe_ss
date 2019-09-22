@@ -43,7 +43,7 @@ def parse_rate(rate_str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('relics', nargs='+')
-    parser.add_argument('--sort-rate', action='store_true')
+    parser.add_argument('--sort-name', action='store_true')
     parser.add_argument('--sort-price', action='store_true')
     args = parser.parse_args()
 
@@ -80,12 +80,12 @@ def main():
 
             rows.append([location, drop_item, rate_str, price])
 
-    if args.sort_rate:
-        rows.sort(key=lambda row: (parse_rate(row[2]), row[2], -row[3]))
+    if args.sort_name:
+        rows.sort(key=lambda row: row[1])
     elif args.sort_price:
         rows.sort(key=lambda row: row[3], reverse=True)
     else:
-        rows.sort(key=lambda row: row[1])
+        rows.sort(key=lambda row: (parse_rate(row[2]), row[2], -row[3]))
     print(tabulate(rows, headers=['Location', 'Drop', 'Rate', 'Price']))
 
 
