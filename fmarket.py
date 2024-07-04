@@ -36,7 +36,7 @@ def parse_relic_args(relic_args):
 
 
 def parse_rate(rate_str):
-    rate = re.search('\(([0-9]*(\.[0-9]+)?)%\)', rate_str)
+    rate = re.search(r'\(([0-9]*(\.[0-9]+)?)%\)', rate_str)
     return float(rate.group(1)) if rate else None
 
 

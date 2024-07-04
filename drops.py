@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-DROPS_URL = 'https://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html'
+DROPS_URL = 'https://www.warframe.com/droptables'
 
 
 class ParseException(Exception):
@@ -90,7 +90,7 @@ def get_missions(nc=True, save=True):
     header = soup.select_one('#missionRewards')
     if header is None:
         raise ParseException('Could not get missions header')
-    table = header.next_sibling
+    table = header.next_sibling.next_sibling
     if table.name != 'table':
         raise ParseException('Could not get missions table')
 
@@ -164,7 +164,7 @@ def get_relics(nc=True, save=True):
     header = soup.select_one('#relicRewards')
     if header is None:
         raise ParseException('Could not get relics header')
-    table = header.next_sibling
+    table = header.next_sibling.next_sibling
     if table.name != 'table':
         raise ParseException('Could not get relics table')
 

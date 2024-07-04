@@ -12,7 +12,7 @@ class ParseException(Exception):
     pass
 
 
-ITEMS_URL = 'https://warframe.market'
+ITEMS_URL = 'https://api.warframe.market/v2/items'
 
 STATISTICS_URL_FORMAT = 'https://api.warframe.market/v1/items/{}/statistics'
 
@@ -24,13 +24,8 @@ def get_items(nc=True, save=True):
         with open('market/items.json') as f:
             return json.load(f)
 
-    text = requests.get(ITEMS_URL).text
-    json_begin_tag = '<script type="application/json" id="application-state">'
-    json_begin = text.index(json_begin_tag) + len(json_begin_tag)
-    json_end_tag = '</script>'
-    json_end = text.index(json_end_tag, json_begin)
-    data = json.loads(text[json_begin:json_end])
-    items = data['items']
+    payload = requests.get(ITEMS_URL).json()
+    items = payload['data']
 
     if save:
         if not os.path.isdir('market'):
@@ -43,7 +38,7 @@ def get_items(nc=True, save=True):
 
 
 def get_stats(item, nc_delta=timedelta(days=1), save=True):
-    url_name = item['url_name']
+    url_name = item['urlName']
     if not re.match('^[A-Za-z0-9_]+$', url_name):
         raise RuntimeError('Invalid url_name {}'.format(url_name))
 
@@ -93,7 +88,7 @@ def find_drop_item(items, drop_item):
     # items = items['payload']['items']['en']
 
     for item in items:
-        if item['item_name'] == drop_item:
+        if item['i18n']['en']['name'] == drop_item:
             return item
 
     if drop_item in DROP_ITEM_NAME_MAP:
@@ -136,7 +131,7 @@ price_by_url_name = {}
 def get_item_price(item, memoize=True):
     global price_by_url_name
     if memoize:
-        url_name = item['url_name']
+        url_name = item['urlName']
         price = price_by_url_name.get(url_name)
         if price is not None:
             return price
